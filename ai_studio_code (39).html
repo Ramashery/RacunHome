@@ -1,0 +1,1518 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RAKUN — Бытовая химия и средства для стирки</title>
+  <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ivory: #f9f6f1;
+      --sand: #ede8e0;
+      --stone: #c8bfb0;
+      --charcoal: #1e1e1e;
+      --warm-gray: #6b6560;
+      --accent: #8b6f47;
+      --accent-light: #c4a882;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--ivory);
+      color: var(--charcoal);
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    /* ─── NAV (DESKTOP) ─────────────────────────────── */
+    nav#main-nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      width: 100%;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px 56px;
+      transition: background 0.5s, padding 0.4s;
+      background: transparent;
+    }
+
+    nav#main-nav.scrolled {
+      background: rgba(249,246,241,0.94);
+      backdrop-filter: blur(14px);
+      padding: 18px 56px;
+      border-bottom: 1px solid var(--sand);
+    }
+
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      color: #fff;
+      text-decoration: none;
+      transition: color 0.4s;
+    }
+    nav#main-nav.scrolled .nav-logo { color: var(--charcoal); }
+
+    .nav-links {
+      display: flex;
+      gap: 40px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: rgba(255,255,255,0.82);
+      text-decoration: none;
+      transition: color 0.3s;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0;
+      width: 0; height: 1px;
+      background: currentColor;
+      transition: width 0.35s;
+    }
+
+    .nav-links a:hover::after { width: 100%; }
+    nav#main-nav.scrolled .nav-links a { color: var(--warm-gray); }
+    nav#main-nav.scrolled .nav-links a:hover { color: var(--accent); }
+
+    .nav-cta {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.67rem;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.55);
+      padding: 10px 24px;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    .nav-cta:hover { background: #fff; color: var(--charcoal); }
+    nav#main-nav.scrolled .nav-cta { color: var(--accent); border-color: var(--accent); }
+    nav#main-nav.scrolled .nav-cta:hover { background: var(--accent); color: #fff; }
+
+    /* ─── MOBILE HEADER & MENU ─────────────────────── */
+    .mobile-header {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1050;
+      background: rgba(249, 246, 241, 0.8);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 20px 24px;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .mobile-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem;
+      letter-spacing: 0.1em;
+      color: #ffffff;
+    }
+
+    .mobile-hamburger {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: flex-end;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .mobile-hamburger .line-1,
+    .mobile-hamburger .line-2 {
+      display: block;
+      height: 1px;
+      background: #ffffff;
+      transition: width 0.3s;
+    }
+
+    .mobile-hamburger .line-1 { width: 24px; }
+    .mobile-hamburger .line-2 { width: 16px; }
+    .mobile-hamburger:hover .line-1 { width: 16px; }
+
+    .mobile-menu-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1100;
+      background: rgba(250, 249, 246, 0.92);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      display: flex;
+      flex-direction: column;
+      transform: translateX(100%);
+      transition: transform 0.7s ease-in-out;
+    }
+
+    .mobile-menu-overlay.open {
+      transform: translateX(0);
+    }
+
+    .mobile-menu-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 24px;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      flex-shrink: 0;
+    }
+
+    .mobile-close {
+      background: none;
+      border: none;
+      color: var(--charcoal);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .mobile-close .material-symbols-outlined {
+      font-size: 30px;
+      font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24;
+    }
+
+    .mobile-menu-nav {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 40px;
+      gap: 32px;
+    }
+
+    .mobile-menu-nav a {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3rem;
+      color: var(--charcoal);
+      text-decoration: none;
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.5s ease, transform 0.5s ease, padding 0.3s ease;
+      line-height: 1;
+    }
+
+    .mobile-menu-overlay.open .mobile-menu-nav a {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .mobile-menu-nav a:hover {
+      font-style: italic;
+      padding-left: 16px;
+    }
+
+    .mobile-menu-nav a:nth-child(1) { transition-delay: 0.1s; }
+    .mobile-menu-nav a:nth-child(2) { transition-delay: 0.2s; }
+    .mobile-menu-nav a:nth-child(3) { transition-delay: 0.3s; }
+    .mobile-menu-nav a:nth-child(4) { transition-delay: 0.4s; }
+    .mobile-menu-nav a:nth-child(5) { transition-delay: 0.5s; }
+
+    .mobile-menu-bottom {
+      padding: 0 40px 64px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      flex-shrink: 0;
+    }
+
+    .mobile-menu-line {
+      width: 48px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    .mobile-menu-inquiries {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .mobile-menu-inquiries .label {
+      font-family: 'Jost', sans-serif;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+    }
+
+    .mobile-menu-inquiries .value {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem;
+      color: var(--charcoal);
+    }
+
+    .mobile-menu-socials {
+      display: flex;
+      gap: 24px;
+      padding-top: 16px;
+    }
+
+    .mobile-menu-socials a {
+      font-family: 'Jost', sans-serif;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--charcoal);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    /* ─── HERO ────────────────────────────────────────── */
+    .hero-slider {
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .hero-slider .carousel-cell {
+      width: 100%;
+      height: 100%;
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(14,29,51,0.6) 0%, rgba(14,29,51,0.12) 65%, rgba(14,29,51,0.45) 100%);
+      z-index: 1;
+    }
+
+    .hero-slider .carousel-cell .inner {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      color: #fff;
+      text-align: center;
+      z-index: 2;
+      max-width: 820px;
+      width: 100%;
+      padding: 0 24px;
+    }
+
+    .hero-slider .inner .subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      font-weight: 300;
+      font-style: italic;
+      letter-spacing: 0.26em;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .hero-slider .inner .title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.6rem, 6vw, 5rem);
+      font-weight: 300;
+      letter-spacing: 0.07em;
+      line-height: 1.12;
+      margin-bottom: 36px;
+    }
+
+    .hero-slider .inner .btn {
+      display: inline-block;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.67rem;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 0.25em;
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.65);
+      padding: 13px 34px;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    .hero-slider .inner .btn:hover { background: #fff; color: var(--charcoal); }
+
+    .flickity-prev-next-button { width: 56px; height: 56px; background: transparent; }
+    .flickity-prev-next-button:hover { background: transparent; }
+    .flickity-prev-next-button .arrow { fill: rgba(255,255,255,0.75); }
+    .flickity-page-dots { bottom: 32px; }
+    .flickity-page-dots .dot {
+      width: 28px; height: 2px; opacity: 1;
+      background: rgba(255,255,255,0.35); border: none; border-radius: 0; margin: 0 4px;
+    }
+    .flickity-page-dots .dot.is-selected { background: var(--accent-light); }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 36px; left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255,255,255,0.5);
+      font-size: 0.58rem;
+      font-family: 'Jost', sans-serif;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+
+    .scroll-line {
+      width: 1px; height: 36px;
+      background: rgba(255,255,255,0.35);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse { 0%,100%{opacity:0.35} 50%{opacity:0.9} }
+
+    /* ─── SECTION COMMON ─────────────────────────────── */
+    section { scroll-margin-top: 80px; }
+
+    .section-label {
+      display: block;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.62rem;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 0.3em;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.9rem, 4vw, 3rem);
+      font-weight: 300;
+      color: var(--charcoal);
+      letter-spacing: 0.03em;
+    }
+
+    .section-divider {
+      width: 36px; height: 1px;
+      background: var(--stone);
+      margin-top: 18px;
+    }
+
+    /* ─── DRAG CAROUSEL ─────────────────────────────── */
+    .drag-section {
+      padding: 96px 0 72px;
+      overflow: hidden;
+    }
+
+    .drag-section .section-header {
+      padding: 0 64px;
+      margin-bottom: 44px;
+    }
+
+    .drag-track-container {
+      overflow: hidden;
+    }
+
+    .image-track {
+      display: flex;
+      gap: 18px;
+      position: relative;
+      left: 64px;
+      user-select: none;
+      cursor: grab;
+      padding-right: 64px;
+      width: max-content;
+    }
+    .image-track:active { cursor: grabbing; }
+
+    /* ─── PRODUCT CARDS ─────────────────────────────── */
+    .image-track .card-room-new {
+      flex-shrink: 0;
+      width: 340px;
+      background-color: var(--ivory);
+      border: 1px solid var(--sand);
+      display: flex;
+      flex-direction: column;
+      transition: border-color 0.3s ease, transform 0.3s ease;
+    }
+    .image-track .card-room-new:hover {
+      border-color: var(--accent-light);
+      transform: translateY(-4px);
+    }
+    .image-track .card-room-new img {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+      display: block;
+      pointer-events: none;
+    }
+    .image-track .card-room-new .card-body {
+      padding: 24px 24px 16px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .image-track .card-room-new .card-category {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      margin-bottom: 8px;
+      display: block;
+    }
+    .image-track .card-room-new .card-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.45rem;
+      font-weight: 400;
+      color: var(--charcoal);
+      line-height: 1.2;
+      margin-bottom: 10px;
+    }
+    .image-track .card-room-new .card-desc {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.8rem;
+      color: var(--warm-gray);
+      line-height: 1.5;
+      margin-bottom: 12px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .image-track .card-room-new .card-footer {
+      margin-top: auto;
+      padding: 16px 24px 24px;
+      border-top: 1px solid rgba(0,0,0,0.04);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .image-track .card-room-new .card-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      color: var(--charcoal);
+    }
+    .image-track .card-room-new .card-link {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s;
+    }
+    .image-track .card-room-new .card-link:hover {
+      border-color: var(--accent);
+    }
+
+    /* ─── BLOG ARTICLE CARDS ───────────────────────── */
+    .image-track .service-card {
+      flex-shrink: 0;
+      width: 300px;
+      background: var(--ivory);
+      text-decoration: none;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: 1px solid transparent;
+      display: block;
+    }
+    .image-track .service-card:hover {
+       transform: translateY(-5px);
+       box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+       border-color: var(--sand);
+    }
+
+    .service-card-img {
+      height: 200px; width: 100%; overflow: hidden;
+    }
+    .service-card-img img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.5s ease;
+      display: block;
+      pointer-events: none;
+    }
+    .image-track .service-card:hover .service-card-img img {
+      transform: scale(1.05);
+    }
+
+    .service-card-body {
+      padding: 20px 18px 24px;
+      display: flex; flex-direction: column;
+    }
+
+    .service-card-cat {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.2em;
+      color: var(--accent); margin-bottom: 8px; display: block;
+    }
+
+    .service-card-title {
+      font-family: 'Cormorant Garamond', serif; font-size: 1.3rem;
+      font-weight: 300; color: var(--charcoal);
+      margin-bottom: 8px; line-height: 1.1; display: block;
+    }
+
+    .service-card-desc {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.7rem; color: var(--warm-gray);
+      line-height: 1.5; margin-bottom: 20px;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+
+    .service-card-link {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.15em;
+      color: var(--charcoal); border-bottom: 1px solid var(--sand);
+      align-self: flex-start; padding-bottom: 2px;
+      transition: color 0.3s, border-color 0.3s;
+    }
+    .image-track .service-card:hover .service-card-link {
+      color: var(--accent); border-color: var(--accent);
+    }
+
+    /* ─── GALLERY CARDS ─────────────────────────────── */
+    .image-track .card {
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+      border-radius: 4px;
+      box-shadow:
+        0 10px 30px rgba(30,30,30,0.12),
+        0 20px 50px rgba(30,30,30,0.08);
+      transition: box-shadow 0.4s ease, transform 0.4s ease;
+    }
+
+    .image-track .card:hover {
+      box-shadow:
+        0 15px 40px rgba(30,30,30,0.15),
+        0 30px 70px rgba(30,30,30,0.12);
+      transform: translateY(-6px);
+    }
+
+    .card-gallery img {
+      width: 40vmin;
+      height: 40vmin;
+      min-width: 240px;
+      max-width: 400px;
+      min-height: 240px;
+      max-height: 400px;
+      object-fit: cover;
+      pointer-events: none;
+      display: block;
+    }
+
+    .card-label {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 36px 18px 18px;
+      background: linear-gradient(to top, rgba(14,29,51,0.82) 0%, transparent 100%);
+      color: #fff;
+    }
+
+    .card-label h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.08rem;
+      font-weight: 300;
+      letter-spacing: 0.05em;
+      margin-bottom: 3px;
+    }
+
+    .card-label p {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.14em;
+      color: rgba(255,255,255,0.62);
+    }
+
+    .drag-hint {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.58rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--stone);
+      padding: 16px 64px 0;
+    }
+
+    .drag-hint::before {
+      content: '';
+      display: block;
+      width: 18px; height: 1px;
+      background: var(--stone);
+    }
+
+    /* ─── STATS ──────────────────────────────────────── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid var(--sand);
+      border-bottom: 1px solid var(--sand);
+    }
+
+    .stat-item {
+      padding: 52px 40px;
+      text-align: center;
+      border-right: 1px solid var(--sand);
+    }
+    .stat-item:last-child { border-right: none; }
+
+    .stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.8rem;
+      font-weight: 300;
+      color: var(--accent);
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .stat-label {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.62rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--warm-gray);
+    }
+
+    /* ─── REVIEWS ─────────────────────────────────────── */
+    #reviews {
+      padding: 96px 0 0;
+      background: var(--sand);
+    }
+
+    #reviews .section-header {
+      padding: 0 64px;
+      margin-bottom: 52px;
+    }
+
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+
+    .review-card {
+      background: var(--ivory);
+      padding: 44px 40px;
+      box-shadow:
+        0 2px 8px rgba(30,30,30,0.055),
+        0 6px 22px rgba(30,30,30,0.05);
+    }
+
+    .review-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3.4rem;
+      line-height: 0.5;
+      color: var(--stone);
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .review-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem;
+      font-style: italic;
+      font-weight: 300;
+      line-height: 1.75;
+      color: var(--charcoal);
+      margin-bottom: 28px;
+    }
+
+    .review-author { display: flex; flex-direction: column; gap: 4px; }
+
+    .review-name {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+    }
+
+    .review-from {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.62rem;
+      color: var(--stone);
+      letter-spacing: 0.1em;
+    }
+
+    .stars {
+      color: var(--accent);
+      font-size: 0.78rem;
+      letter-spacing: 2px;
+      margin-bottom: 18px;
+    }
+
+    /* ─── CONTACTS ─────────────────────────────────────── */
+    #contacts {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      margin-top: 80px;
+    }
+
+    .contact-map { height: 500px; overflow: hidden; }
+    .contact-map iframe { width: 100%; height: 100%; border: none; filter: grayscale(25%); }
+
+    .contact-info {
+      padding: 80px 72px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .contact-info .section-divider { margin: 18px 0 36px; }
+
+    .contact-detail { margin-bottom: 26px; }
+
+    .contact-detail-label {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.24em;
+      color: var(--stone);
+      margin-bottom: 5px;
+    }
+
+    .contact-detail-value {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: var(--charcoal);
+      text-decoration: none;
+      display: block;
+      transition: color 0.3s;
+    }
+    a.contact-detail-value:hover { color: var(--accent); }
+
+    .btn-accent {
+      display: inline-block;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.67rem;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      color: #fff;
+      background: var(--accent);
+      padding: 15px 38px;
+      text-decoration: none;
+      transition: background 0.3s;
+      margin-top: 8px;
+    }
+    .btn-accent:hover { background: var(--charcoal); }
+
+    /* ─── FOOTER ─────────────────────────────────────── */
+    footer {
+      background: var(--charcoal);
+      color: rgba(249,246,241,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px 56px;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.62rem;
+      letter-spacing: 0.15em;
+    }
+
+    .footer-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      font-weight: 400;
+      color: var(--ivory);
+      letter-spacing: 0.1em;
+    }
+
+    .footer-links { display: flex; gap: 28px; }
+    .footer-links a {
+      color: rgba(249,246,241,0.35);
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      transition: color 0.3s;
+    }
+    .footer-links a:hover { color: var(--accent-light); }
+
+    /* ─── FADE IN ────────────────────────────────────── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: none; }
+
+    /* ─── RESPONSIVE ─────────────────────────────────── */
+    @media (max-width: 1024px) {
+      nav#main-nav { display: none; }
+      .mobile-header { display: flex; }
+
+      .drag-section .section-header { padding: 0 32px; }
+      .image-track { left: 32px; padding-right: 32px; }
+      .drag-hint { padding: 14px 32px 0; }
+
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .stat-item:nth-child(2) { border-right: none; }
+      .stat-item:nth-child(3) { border-top: 1px solid var(--sand); }
+
+      .reviews-grid { grid-template-columns: 1fr; gap: 2px; }
+      #reviews .section-header { padding: 0 32px; }
+
+      #contacts {
+        grid-template-columns: 1fr;
+        margin-top: 0;
+      }
+      .contact-map { height: 280px; }
+      .contact-info { padding: 56px 32px; }
+
+      footer { flex-direction: column; gap: 20px; text-align: center; padding: 28px 24px; }
+      .footer-links { gap: 20px; }
+    }
+
+    @media (max-width: 640px) {
+      .hero-slider .inner .title { font-size: 2.2rem; }
+      .stat-item { padding: 36px 20px; }
+      .review-card { padding: 32px 24px; }
+      .contact-info { padding: 48px 24px; }
+
+      .image-track .card-room-new {
+        width: 280px;
+      }
+      .image-track .card-room-new img {
+        height: 200px;
+      }
+      .image-track .service-card { width: 260px; }
+      .service-card-img { height: 160px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── NAV (DESKTOP) ───────────────────────────── -->
+  <nav id="main-nav">
+    <a href="#hero" class="nav-logo"><img src="https://i.postimg.cc/vTzZwbyh/f7b002e8-bc76-4267-99bc-e8d3df3d5250-0.png" alt="RAKUN" style="height: 1.2em; vertical-align: middle;"></a>
+    <ul class="nav-links">
+      <li><a href="#products">Каталог</a></li>
+      <li><a href="#blog">Блог</a></li>
+      <li><a href="#gallery">Галерея</a></li>
+      <li><a href="#reviews">Отзывы</a></li>
+      <li><a href="#contacts">Контакты</a></li>
+    </ul>
+    <a href="#contacts" class="nav-cta">Связаться</a>
+  </nav>
+
+  <!-- ─── MOBILE HEADER ────────────────────────────── -->
+  <header class="mobile-header" id="mobile-header">
+    <span class="mobile-logo"><img src="https://i.postimg.cc/vTzZwbyh/f7b002e8-bc76-4267-99bc-e8d3df3d5250-0.png" alt="RAKUN" style="height: 1.2em; vertical-align: middle;"></span>
+    <button class="mobile-hamburger" onclick="toggleMobileMenu()">
+      <span class="line-1"></span>
+      <span class="line-2"></span>
+    </button>
+  </header>
+
+  <!-- ─── MOBILE MENU OVERLAY ──────────────────────── -->
+  <div class="mobile-menu-overlay" id="mobile-menu-overlay">
+    <div class="mobile-menu-top">
+      <span class="mobile-logo"><img src="https://i.postimg.cc/vTzZwbyh/f7b002e8-bc76-4267-99bc-e8d3df3d5250-0.png" alt="RAKUN" style="height: 1.2em; vertical-align: middle;"></span>
+      <button class="mobile-close" onclick="toggleMobileMenu()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <nav class="mobile-menu-nav">
+      <a href="#products" onclick="toggleMobileMenu()">Каталог</a>
+      <a href="#blog" onclick="toggleMobileMenu()">Блог</a>
+      <a href="#gallery" onclick="toggleMobileMenu()">Галерея</a>
+      <a href="#reviews" onclick="toggleMobileMenu()">Отзывы</a>
+      <a href="#contacts" onclick="toggleMobileMenu()">Контакты</a>
+    </nav>
+    <div class="mobile-menu-bottom">
+      <div class="mobile-menu-line"></div>
+      <div class="mobile-menu-inquiries">
+        <p class="label">Email</p>
+        <p class="value">eap@biotrade.group</p>
+      </div>
+      <div class="mobile-menu-socials">
+        <a href="#">Instagram</a>
+        <a href="#">Telegram</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── HERO ─────────────────────────────────────── -->
+  <section id="hero">
+    <div class="hero-slider" data-carousel>
+      <div class="carousel-cell" style="background-image:url('https://images.unsplash.com/photo-1585421514284-efb74c2b69ba?auto=format&fit=crop&w=1600&q=80');">
+        <div class="overlay"></div>
+        <div class="inner">
+          <span class="subtitle">Чистота в каждой капле</span>
+          <h1 class="title">Профессиональная<br>Бытовая Химия</h1>
+          <a href="#products" class="btn">Смотреть каталог</a>
+        </div>
+      </div>
+      <div class="carousel-cell" style="background-image:url('https://images.unsplash.com/photo-1563453392212-326f5e854473?auto=format&fit=crop&w=1600&q=80');">
+        <div class="overlay"></div>
+        <div class="inner">
+          <span class="subtitle">RAKUN — качество, которому доверяют</span>
+          <h1 class="title">Капсулы и Гели<br>для Стирки</h1>
+          <a href="#products" class="btn">Узнать больше</a>
+        </div>
+      </div>
+      <div class="carousel-cell" style="background-image:url('https://images.unsplash.com/photo-1556909212-d5b604d0c90d?auto=format&fit=crop&w=1600&q=80');">
+        <div class="overlay"></div>
+        <div class="inner">
+          <span class="subtitle">Дом в идеальной чистоте</span>
+          <h1 class="title">Средства для<br>Дома и Кухни</h1>
+          <a href="#contacts" class="btn">Оптовые заказы</a>
+        </div>
+      </div>
+    </div>
+    <div class="scroll-hint">
+      <span>Листать</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ─── STATS ─────────────────────────────────────── -->
+  <div class="stats-row fade-in">
+    <div class="stat-item">
+      <span class="stat-num">50+</span>
+      <span class="stat-label">Позиций в каталоге</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">4.9</span>
+      <span class="stat-label">Рейтинг покупателей</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">10+</span>
+      <span class="stat-label">Лет на рынке</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">∞</span>
+      <span class="stat-label">Чистых домов</span>
+    </div>
+  </div>
+
+  <!-- ─── PRODUCTS ──────────────────────────────────── -->
+  <section id="products" class="drag-section">
+    <div class="section-header fade-in">
+      <span class="section-label">Наша продукция</span>
+      <h2 class="section-title">Каталог товаров</h2>
+      <div class="section-divider"></div>
+    </div>
+    <div class="drag-track-container">
+      <div class="image-track" id="rooms-track">
+
+        <!-- Продукт 1 -->
+        <div class="card-room-new">
+          <img alt="Капсулы Single Power 90 шт" draggable="false" src="https://images.unsplash.com/photo-1585421514738-01798e348b17?auto=format&fit=crop&w=700&q=80"/>
+          <div class="card-body">
+            <span class="card-category">Капсулы для стирки</span>
+            <h3 class="card-title">Single Power, 90 шт</h3>
+            <p class="card-desc">Концентрированные капсулы для эффективного удаления пятен. Пластиковый контейнер, 90 штук.</p>
+          </div>
+          <div class="card-footer">
+            <span class="card-price">2 354,63 ADM</span>
+            <a class="card-link" href="#">Подробнее</a>
+          </div>
+        </div>
+
+        <!-- Продукт 2 -->
+        <div class="card-room-new">
+          <img alt="Капсулы Single Power 50 шт" draggable="false" src="https://images.unsplash.com/photo-1582735689369-4fe89db7114c?auto=format&fit=crop&w=700&q=80"/>
+          <div class="card-body">
+            <span class="card-category">Капсулы для стирки</span>
+            <h3 class="card-title">Single Power, 50 шт</h3>
+            <p class="card-desc">Концентрированные капсулы для эффективного удаления пятен. Пластиковый контейнер, 50 штук.</p>
+          </div>
+          <div class="card-footer">
+            <span class="card-price">1 594,13 ADM</span>
+            <a class="card-link" href="#">Подробнее</a>
+          </div>
+        </div>
+
+        <!-- Продукт 3 -->
+        <div class="card-room-new">
+          <img alt="Капсулы Multi Power 5 в 1" draggable="false" src="https://images.unsplash.com/photo-1574482620826-40685ca5eef2?auto=format&fit=crop&w=700&q=80"/>
+          <div class="card-body">
+            <span class="card-category">Капсулы для стирки</span>
+            <h3 class="card-title">Multi Power «5 в 1», 50 шт</h3>
+            <p class="card-desc">Многофункциональные капсулы 5 в 1 с защитой цвета и ароматическим эффектом. 50 штук.</p>
+          </div>
+          <div class="card-footer">
+            <span class="card-price">2 219,63 ADM</span>
+            <a class="card-link" href="#">Подробнее</a>
+          </div>
+        </div>
+
+        <!-- Продукт 4 -->
+        <div class="card-room-new">
+          <img alt="Капсулы Multi Power 5 в 1, 35 шт" draggable="false" src="https://images.unsplash.com/photo-1545454675-3531b543be5d?auto=format&fit=crop&w=700&q=80"/>
+          <div class="card-body">
+            <span class="card-category">Капсулы для стирки</span>
+            <h3 class="card-title">Multi Power «5 в 1», 35 шт</h3>
+            <p class="card-desc">Многофункциональные капсулы 5 в 1 с защитой цвета и ароматическим эффектом. 35 штук.</p>
+          </div>
+          <div class="card-footer">
+            <span class="card-price">1 693,88 ADM</span>
+            <a class="card-link" href="#">Подробнее</a>
+          </div>
+        </div>
+
+        <!-- Продукт 5 -->
+        <div class="card-room-new">
+          <img alt="Гель для стирки Universal 2L" draggable="false" src="https://images.unsplash.com/photo-1563453392212-326f5e854473?auto=format&fit=crop&w=700&q=80"/>
+          <div class="card-body">
+            <span class="card-category">Гель для стирки</span>
+            <h3 class="card-title">Universal (Perfumed), 2 л</h3>
+            <p class="card-desc">Универсальный ароматизированный гель для стирки. Эффективен при температуре от 30°C. Объём 2 литра.</p>
+          </div>
+          <div class="card-footer">
+            <span class="card-price">2 005,54 ADM</span>
+            <a class="card-link" href="#">Подробнее</a>
+          </div>
+        </div>
+
+        <!-- Продукт 6 -->
+        <div class="card-room-new">
+          <img alt="Гель для стирки Universal 5L" draggable="false" src="https://images.unsplash.com/photo-1585421514284-efb74c2b69ba?auto=format&fit=crop&w=700&q=80"/>
+          <div class="card-body">
+            <span class="card-category">Гель для стирки</span>
+            <h3 class="card-title">Universal (Perfumed), 5 л</h3>
+            <p class="card-desc">Экономичный формат универсального ароматизированного геля для стирки. Объём 5 литров.</p>
+          </div>
+          <div class="card-footer">
+            <span class="card-price">3 159,06 ADM</span>
+            <a class="card-link" href="#">Подробнее</a>
+          </div>
+        </div>
+
+        <!-- Продукт 7 -->
+        <div class="card-room-new">
+          <img alt="Обезжириватель 0.75 л" draggable="false" src="https://images.unsplash.com/photo-1556909212-d5b604d0c90d?auto=format&fit=crop&w=700&q=80"/>
+          <div class="card-body">
+            <span class="card-category">Бытовая химия</span>
+            <h3 class="card-title">Обезжириватель, 0,75 л</h3>
+            <p class="card-desc">Эффективный спрей-обезжириватель для кухонных поверхностей, плиты и вытяжки. 750 мл.</p>
+          </div>
+          <div class="card-footer">
+            <span class="card-price">823,45 ADM</span>
+            <a class="card-link" href="#">Подробнее</a>
+          </div>
+        </div>
+
+        <!-- Продукт 8 -->
+        <div class="card-room-new">
+          <img alt="Средство для стекла 0.75 л" draggable="false" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=700&q=80"/>
+          <div class="card-body">
+            <span class="card-category">Бытовая химия</span>
+            <h3 class="card-title">Средство для стекла, 0,75 л</h3>
+            <p class="card-desc">Профессиональный очиститель стекла и зеркал без разводов. Спрей 750 мл.</p>
+          </div>
+          <div class="card-footer">
+            <span class="card-price">823,45 ADM</span>
+            <a class="card-link" href="#">Подробнее</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <p class="drag-hint">Перетащите для просмотра</p>
+  </section>
+
+  <!-- ─── BLOG ──────────────────────────────────────── -->
+  <section id="blog" class="drag-section" style="background:var(--sand);">
+    <div class="section-header fade-in">
+      <span class="section-label">Советы и знания</span>
+      <h2 class="section-title">Блог</h2>
+      <div class="section-divider"></div>
+    </div>
+    <div class="drag-track-container">
+      <div class="image-track" id="services-track">
+
+        <!-- Статья 1 -->
+        <a href="#" class="service-card">
+          <div class="service-card-img">
+            <img src="https://images.unsplash.com/photo-1585421514284-efb74c2b69ba?auto=format&fit=crop&w=700&q=80" draggable="false" alt="Капсулы vs гель">
+          </div>
+          <div class="service-card-body">
+            <span class="service-card-cat">Стирка · Советы</span>
+            <h3 class="service-card-title">Капсулы или гель: что выбрать?</h3>
+            <p class="service-card-desc">Разбираемся в преимуществах каждого формата и помогаем выбрать подходящее средство для вашего типа белья.</p>
+            <span class="service-card-link">Читать</span>
+          </div>
+        </a>
+
+        <!-- Статья 2 -->
+        <a href="#" class="service-card">
+          <div class="service-card-img">
+            <img src="https://images.unsplash.com/photo-1556909212-d5b604d0c90d?auto=format&fit=crop&w=700&q=80" draggable="false" alt="Чистая кухня">
+          </div>
+          <div class="service-card-body">
+            <span class="service-card-cat">Кухня · Уборка</span>
+            <h3 class="service-card-title">5 шагов к идеальной кухне</h3>
+            <p class="service-card-desc">Пошаговое руководство по ежедневной и еженедельной уборке кухни с правильными средствами.</p>
+            <span class="service-card-link">Читать</span>
+          </div>
+        </a>
+
+        <!-- Статья 3 -->
+        <a href="#" class="service-card">
+          <div class="service-card-img">
+            <img src="https://images.unsplash.com/photo-1582735689369-4fe89db7114c?auto=format&fit=crop&w=700&q=80" draggable="false" alt="Выведение пятен">
+          </div>
+          <div class="service-card-body">
+            <span class="service-card-cat">Стирка · Пятна</span>
+            <h3 class="service-card-title">Как вывести любое пятно</h3>
+            <p class="service-card-desc">Детальный гид по удалению пятен от жира, травы, вина и других загрязнений с разных видов ткани.</p>
+            <span class="service-card-link">Читать</span>
+          </div>
+        </a>
+
+        <!-- Статья 4 -->
+        <a href="#" class="service-card">
+          <div class="service-card-img">
+            <img src="https://images.unsplash.com/photo-1563453392212-326f5e854473?auto=format&fit=crop&w=700&q=80" draggable="false" alt="Экология">
+          </div>
+          <div class="service-card-body">
+            <span class="service-card-cat">Эко · Ответственность</span>
+            <h3 class="service-card-title">Бытовая химия и экология</h3>
+            <p class="service-card-desc">Как выбирать средства с минимальным воздействием на окружающую среду и что означает биоразлагаемый состав.</p>
+            <span class="service-card-link">Читать</span>
+          </div>
+        </a>
+
+        <!-- Статья 5 -->
+        <a href="#" class="service-card">
+          <div class="service-card-img">
+            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=700&q=80" draggable="false" alt="Стекло и зеркала">
+          </div>
+          <div class="service-card-body">
+            <span class="service-card-cat">Лайфхак · Уход</span>
+            <h3 class="service-card-title">Зеркала без разводов: секрет</h3>
+            <p class="service-card-desc">Простые приёмы для идеальной чистоты зеркальных поверхностей и стеклянных дверей без лишних усилий.</p>
+            <span class="service-card-link">Читать</span>
+          </div>
+        </a>
+
+        <!-- Статья 6 -->
+        <a href="#" class="service-card">
+          <div class="service-card-img">
+            <img src="https://images.unsplash.com/photo-1545454675-3531b543be5d?auto=format&fit=crop&w=700&q=80" draggable="false" alt="Хранение химии">
+          </div>
+          <div class="service-card-body">
+            <span class="service-card-cat">Безопасность · Хранение</span>
+            <h3 class="service-card-title">Правила хранения бытовой химии</h3>
+            <p class="service-card-desc">Советы по безопасному хранению чистящих средств вдали от детей и продуктов питания.</p>
+            <span class="service-card-link">Читать</span>
+          </div>
+        </a>
+
+      </div>
+    </div>
+    <p class="drag-hint">Перетащите для просмотра</p>
+  </section>
+
+  <!-- ─── GALLERY ───────────────────────────────────── -->
+  <section id="gallery" class="drag-section">
+    <div class="section-header fade-in">
+      <span class="section-label">Наши продукты</span>
+      <h2 class="section-title">Галерея</h2>
+      <div class="section-divider"></div>
+    </div>
+    <div class="drag-track-container">
+      <div class="image-track" id="gallery-track">
+        <div class="card card-gallery">
+          <img src="https://images.unsplash.com/photo-1585421514284-efb74c2b69ba?auto=format&fit=crop&w=600&h=600&q=80" draggable="false" alt="Gallery 1">
+        </div>
+        <div class="card card-gallery">
+          <img src="https://images.unsplash.com/photo-1563453392212-326f5e854473?auto=format&fit=crop&w=600&h=600&q=80" draggable="false" alt="Gallery 2">
+        </div>
+        <div class="card card-gallery">
+          <img src="https://images.unsplash.com/photo-1582735689369-4fe89db7114c?auto=format&fit=crop&w=600&h=600&q=80" draggable="false" alt="Gallery 3">
+        </div>
+        <div class="card card-gallery">
+          <img src="https://images.unsplash.com/photo-1556909212-d5b604d0c90d?auto=format&fit=crop&w=600&h=600&q=80" draggable="false" alt="Gallery 4">
+        </div>
+        <div class="card card-gallery">
+          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=600&h=600&q=80" draggable="false" alt="Gallery 5">
+        </div>
+        <div class="card card-gallery">
+          <img src="https://images.unsplash.com/photo-1545454675-3531b543be5d?auto=format&fit=crop&w=600&h=600&q=80" draggable="false" alt="Gallery 6">
+        </div>
+        <div class="card card-gallery">
+          <img src="https://images.unsplash.com/photo-1574482620826-40685ca5eef2?auto=format&fit=crop&w=600&h=600&q=80" draggable="false" alt="Gallery 7">
+        </div>
+        <div class="card card-gallery">
+          <img src="https://images.unsplash.com/photo-1585421514738-01798e348b17?auto=format&fit=crop&w=600&h=600&q=80" draggable="false" alt="Gallery 8">
+        </div>
+      </div>
+    </div>
+    <p class="drag-hint">Перетащите для просмотра</p>
+  </section>
+
+  <!-- ─── REVIEWS ───────────────────────────────────── -->
+  <section id="reviews">
+    <div class="section-header fade-in">
+      <span class="section-label">Голоса клиентов</span>
+      <h2 class="section-title">Отзывы</h2>
+      <div class="section-divider"></div>
+    </div>
+    <div class="reviews-grid">
+      <div class="review-card fade-in">
+        <span class="review-quote">"</span>
+        <div class="stars">★★★★★</div>
+        <p class="review-text">Заказываю капсулы RAKUN уже больше года. Отстирывает с первого раза, запах приятный и ненавязчивый. Очень удобная упаковка для хранения.</p>
+        <div class="review-author">
+          <span class="review-name">Анна М.</span>
+          <span class="review-from">Ереван, Армения</span>
+        </div>
+      </div>
+      <div class="review-card fade-in" style="transition-delay:0.14s;">
+        <span class="review-quote">"</span>
+        <div class="stars">★★★★★</div>
+        <p class="review-text">Гель для стирки 5 л — отличный выбор для большой семьи. Хватает надолго, эффект заметен даже при стирке в холодной воде. Буду брать снова.</p>
+        <div class="review-author">
+          <span class="review-name">Давид Г.</span>
+          <span class="review-from">Тбилиси, Грузия</span>
+        </div>
+      </div>
+      <div class="review-card fade-in" style="transition-delay:0.28s;">
+        <span class="review-quote">"</span>
+        <div class="stars">★★★★★</div>
+        <p class="review-text">Средство для стекла работает идеально — никаких разводов. Использую и дома, и в офисе. Обезжириватель тоже отличный, кухня блестит.</p>
+        <div class="review-author">
+          <span class="review-name">Нино К.</span>
+          <span class="review-from">Батуми, Грузия</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── CONTACTS ──────────────────────────────────── -->
+  <section id="contacts">
+    <div class="contact-map">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d47720.97905296636!2d44.74920095!3d41.69411365!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40440cd7c4f87d35%3A0xa1729e07e07c32be!2sTbilisi%2C%20Georgia!5e0!3m2!1sen!2sus!4v1710000000000"
+        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+    <div class="contact-info">
+      <span class="section-label">Свяжитесь с нами</span>
+      <h2 class="section-title">Контакты</h2>
+      <div class="section-divider"></div>
+      <div class="contact-detail">
+        <div class="contact-detail-label">Телефон</div>
+        <a href="tel:+995591028083" class="contact-detail-value">+995 591 028 083</a>
+      </div>
+      <div class="contact-detail">
+        <div class="contact-detail-label">Email</div>
+        <a href="mailto:eap@biotrade.group" class="contact-detail-value">eap@biotrade.group</a>
+      </div>
+      <div class="contact-detail">
+        <div class="contact-detail-label">Минимальный заказ</div>
+        <span class="contact-detail-value">Бытовая химия — от 2 000 единиц<br>Капсулы — от 1 250 упаковок</span>
+      </div>
+      <div class="contact-detail">
+        <div class="contact-detail-label">Доставка</div>
+        <span class="contact-detail-value">Цена с доставкой до Еревана, Армения</span>
+      </div>
+      <a href="mailto:eap@biotrade.group" class="btn-accent">Написать нам</a>
+    </div>
+  </section>
+
+  <!-- ─── FOOTER ────────────────────────────────────── -->
+  <footer>
+    <span class="footer-logo">RAKUN</span>
+    <div class="footer-links">
+      <a href="#products">Каталог</a>
+      <a href="#blog">Блог</a>
+      <a href="#gallery">Галерея</a>
+      <a href="#contacts">Контакты</a>
+    </div>
+    <span>© 2025 RAKUN · Laundry Capsules and Gels · Household Chemicals</span>
+  </footer>
+
+  <!-- ─── SCRIPTS ───────────────────────────────────── -->
+  <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+  <script>
+  (function () {
+
+    /* ── Hero parallax carousel ── */
+    var carousel = document.querySelector('[data-carousel]');
+    var slides = document.getElementsByClassName('carousel-cell');
+    var flkty = new Flickity(carousel, {
+      accessibility: true,
+      prevNextButtons: true,
+      pageDots: true,
+      setGallerySize: false,
+      wrapAround: true,
+      autoPlay: 5500,
+      arrowShape: { x0: 10, x1: 60, y1: 50, x2: 60, y2: 45, x3: 15 }
+    });
+
+    flkty.on('scroll', function () {
+      flkty.slides.forEach(function (slide, i) {
+        var x = (slide.target + flkty.x) * -1 / 3;
+        slides[i].style.backgroundPosition = x + 'px center';
+      });
+    });
+
+    /* ── Nav scroll ── */
+    var nav = document.getElementById('main-nav');
+    var mobileHeader = document.getElementById('mobile-header');
+
+    function handleScroll() {
+      if (nav) {
+        nav.classList.toggle('scrolled', window.scrollY > 60);
+      }
+      if (mobileHeader) {
+        if (window.scrollY <= 10) {
+          mobileHeader.style.background = 'transparent';
+          mobileHeader.style.backdropFilter = 'none';
+          mobileHeader.style.borderBottom = 'none';
+        } else {
+          mobileHeader.style.background = 'rgba(249, 246, 241, 0.8)';
+          mobileHeader.style.backdropFilter = 'blur(12px)';
+          mobileHeader.style.borderBottom = '1px solid rgba(0,0,0,0.05)';
+        }
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+
+    /* ── Mobile menu ── */
+    window.toggleMobileMenu = function() {
+      var menu = document.getElementById('mobile-menu-overlay');
+      var isOpen = menu.classList.contains('open');
+      if (isOpen) {
+        menu.classList.remove('open');
+        document.body.style.overflow = '';
+      } else {
+        menu.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+    };
+
+    /* ── Bounded drag track ── */
+    function initDragTrack(trackId) {
+      var track = document.getElementById(trackId);
+      if (!track) return;
+
+      var isDown  = false;
+      var startX  = 0;
+      var currentPx = 0;
+      var startPx = 0;
+
+      function getMaxTravel() {
+        var containerW = track.parentElement.offsetWidth;
+        var trackW = track.scrollWidth;
+        var leftOffset = parseFloat(track.style.left) || 64;
+        var extra = leftOffset;
+        return Math.max(0, trackW - containerW + extra);
+      }
+
+      function clampedPx(px) {
+        return Math.max(-getMaxTravel(), Math.min(0, px));
+      }
+
+      function applyTranslate(px) {
+        var clamped = clampedPx(px);
+        currentPx = clamped;
+        track.style.transform = 'translateX(' + clamped + 'px)';
+        return clamped;
+      }
+
+      function getClientX(e) {
+        if (e.clientX !== undefined) return e.clientX;
+        if (e.touches && e.touches[0]) return e.touches[0].clientX;
+        return null;
+      }
+
+      track.addEventListener('mousedown', function (e) {
+        var cx = getClientX(e);
+        if (cx === null) return;
+        isDown  = true;
+        startX  = cx;
+        startPx = currentPx;
+        track.style.cursor = 'grabbing';
+        track.style.transition = 'none';
+      });
+
+      window.addEventListener('mouseup', function () {
+        if (!isDown) return;
+        isDown = false;
+        track.style.cursor = 'grab';
+        track.style.transition = 'transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94)';
+        applyTranslate(currentPx);
+      });
+
+      window.addEventListener('mousemove', function (e) {
+        if (!isDown) return;
+        var cx = getClientX(e);
+        if (cx === null) return;
+        applyTranslate(startPx + (cx - startX));
+      });
+
+      track.addEventListener('touchstart', function (e) {
+        var cx = getClientX(e);
+        if (cx === null) return;
+        isDown  = true;
+        startX  = cx;
+        startPx = currentPx;
+        track.style.transition = 'none';
+      }, { passive: true });
+
+      track.addEventListener('touchend', function () {
+        isDown = false;
+        track.style.transition = 'transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94)';
+        applyTranslate(currentPx);
+      });
+
+      track.addEventListener('touchmove', function (e) {
+        if (!isDown) return;
+        var cx = getClientX(e);
+        if (cx === null) return;
+        applyTranslate(startPx + (cx - startX));
+      }, { passive: true });
+
+      track.querySelectorAll('img').forEach(function (img) {
+        img.addEventListener('dragstart', function (e) { e.preventDefault(); });
+      });
+    }
+
+    initDragTrack('rooms-track');
+    initDragTrack('services-track');
+    initDragTrack('gallery-track');
+
+    /* ── Fade in on scroll ── */
+    var fadeEls = document.querySelectorAll('.fade-in');
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.12 });
+    fadeEls.forEach(function(el) { observer.observe(el); });
+
+  }());
+  </script>
+</body>
+</html>
