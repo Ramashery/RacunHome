@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RAKUN — High-Tech Household Chemicals</title>
+  <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --brand-blue: #2F3B81;
+      --brand-green: #83C886;
+      --brand-yellow: #D8E063;
+      --bg-white: #FFFFFF;
+      --bg-light: #F5F7FA;
+      --bg-dark: #111424;
+      --text-main: #1C1F33;
+      --text-muted: #6B7280;
+      --border-color: #E5E7EB;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg-white); color: var(--text-main); font-family: 'Inter', sans-serif; font-weight: 400; overflow-x: hidden; }
+    h1, h2, h3, h4, h5, h6 { font-family: 'Montserrat', sans-serif; }
+
+    .nav-logo img, .mobile-logo img, .mobile-menu-top img, .footer-logo img {
+      filter: brightness(0) invert(1);
+    }
+
+    /* NAV DESKTOP */
+    nav#main-nav {
+      position: fixed; top: 0; left: 0; right: 0; width: 100%; z-index: 1000;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 28px 56px; transition: background 0.4s, padding 0.4s, box-shadow 0.4s;
+      background: transparent;
+    }
+    nav#main-nav.scrolled { background: var(--brand-blue); padding: 16px 56px; box-shadow: 0 10px 30px rgba(17,20,36,0.1); }
+    .nav-logo img { height: 32px; vertical-align: middle; transition: transform 0.3s; }
+    .nav-logo:hover img { transform: scale(1.05); }
+    .nav-links { display: flex; gap: 40px; list-style: none; }
+    .nav-links a { font-family: 'Montserrat', sans-serif; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em; color: #FFFFFF; text-decoration: none; transition: color 0.3s; position: relative; }
+    .nav-links a::after { content: ''; position: absolute; bottom: -6px; left: 0; width: 0; height: 2px; background: var(--brand-yellow); transition: width 0.35s ease; }
+    .nav-links a:hover { color: var(--brand-yellow); }
+    .nav-links a:hover::after { width: 100%; }
+
+    .lang-switcher { display: flex; align-items: center; gap: 12px; }
+    .lang-switcher a { font-family: 'Montserrat', sans-serif; font-size: 0.75rem; font-weight: 700; color: #FFFFFF; text-decoration: none; transition: all 0.3s; opacity: 0.5; }
+    .lang-switcher a:hover { opacity: 1; color: var(--brand-green); }
+    .lang-switcher a.active { opacity: 1; color: var(--brand-yellow); }
+    .lang-separator { color: rgba(255,255,255,0.2); font-size: 0.8rem; }
+
+    /* MOBILE HEADER — прозрачный до скролла, размеры как на странице товара */
+    .mobile-header {
+      display: none; position: fixed; top: 0; left: 0; right: 0; z-index: 1050;
+      background: transparent;
+      height: 64px; padding: 0 24px;
+      justify-content: space-between; align-items: center;
+      transition: background 0.4s, box-shadow 0.4s;
+      box-sizing: border-box;
+    }
+    .mobile-header.scrolled { background: var(--brand-blue); border-bottom: 1px solid rgba(255,255,255,0.1); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+
+    .mobile-hamburger { display: flex; flex-direction: column; gap: 6px; background: none; border: none; cursor: pointer; padding: 4px 0; width: 32px; align-items: flex-end; }
+    .mobile-hamburger span { display: block; height: 2px; background: #FFF; transition: width 0.3s; }
+    .mobile-hamburger .line-1 { width: 24px; }
+    .mobile-hamburger .line-2 { width: 16px; }
+
+    /* MOBILE MENU OVERLAY */
+    .mobile-menu-overlay { position: fixed; inset: 0; z-index: 1100; background: var(--brand-blue); display: flex; flex-direction: column; transform: translateX(100%); transition: transform 0.5s cubic-bezier(0.77,0,0.175,1); }
+    .mobile-menu-overlay.open { transform: translateX(0); }
+    .mobile-menu-top { display: flex; justify-content: space-between; align-items: center; height: 64px; padding: 0 24px; border-bottom: 1px solid rgba(255,255,255,0.1); box-sizing: border-box; }
+    .mobile-close { background: none; border: none; color: #FFF; cursor: pointer; padding: 0; width: 32px; display: flex; justify-content: flex-end; }
+    .mobile-close .material-symbols-outlined { font-size: 32px; }
+    .mobile-menu-nav { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 0 40px; gap: 32px; }
+    .mobile-menu-nav a { font-family: 'Montserrat', sans-serif; font-size: 2.2rem; font-weight: 700; color: #FFF; text-decoration: none; text-transform: uppercase; transition: color 0.3s; }
+    .mobile-menu-nav a:hover { color: var(--brand-yellow); }
+    .mobile-menu-bottom { padding: 0 40px 64px; }
+    .mobile-lang { margin-bottom: 32px; display: flex; gap: 16px; align-items: center; }
+    .mobile-lang a { font-family: 'Montserrat', sans-serif; font-size: 1rem; font-weight: 700; color: #FFF; text-decoration: none; opacity: 0.5; }
+    .mobile-lang a.active { opacity: 1; color: var(--brand-yellow); }
+
+    /* HERO */
+    .hero-slider { width: 100%; height: 100vh; overflow: hidden; background: var(--bg-dark); }
+    .hero-slider .carousel-cell { width: 100%; height: 100%; background-repeat: no-repeat; background-size: cover; background-position: center; position: relative; }
+    .overlay { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(17,20,36,0.8) 0%, rgba(47,59,129,0.6) 100%); z-index: 1; }
+    .hero-slider .carousel-cell .inner { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); color: #fff; text-align: center; z-index: 2; max-width: 900px; width: 100%; padding: 0 24px; }
+    .hero-slider .inner .subtitle { font-family: 'Montserrat', sans-serif; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3em; color: var(--brand-green); margin-bottom: 16px; display: block; }
+    .hero-slider .inner .title { font-size: clamp(2.5rem,6vw,5.5rem); font-weight: 800; text-transform: uppercase; letter-spacing: 0.02em; line-height: 1.1; margin-bottom: 40px; text-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+    .hero-slider .inner .btn { display: inline-block; font-family: 'Montserrat', sans-serif; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--brand-blue); background: var(--brand-yellow); padding: 18px 40px; text-decoration: none; transition: all 0.3s; border-radius: 2px; }
+    .hero-slider .inner .btn:hover { background: #FFF; transform: translateY(-3px); box-shadow: 0 10px 25px rgba(216,224,99,0.4); }
+    .flickity-prev-next-button { width: 56px; height: 56px; background: rgba(255,255,255,0.1); border-radius: 50%; }
+    .flickity-prev-next-button:hover { background: var(--brand-blue); }
+    .flickity-prev-next-button .arrow { fill: #FFF; }
+    .flickity-page-dots { bottom: 40px; }
+    .flickity-page-dots .dot { width: 40px; height: 3px; background: rgba(255,255,255,0.3); border-radius: 0; margin: 0 4px; }
+    .flickity-page-dots .dot.is-selected { background: var(--brand-yellow); }
+
+    /* SECTION COMMON */
+    section { scroll-margin-top: 80px; }
+    .section-label { font-family: 'Montserrat', sans-serif; display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.2em; color: var(--brand-blue); margin-bottom: 12px; }
+    .section-title { font-size: clamp(2rem,4vw,3.5rem); font-weight: 800; color: var(--text-main); text-transform: uppercase; letter-spacing: -0.01em; }
+    .section-divider { width: 60px; height: 4px; background: var(--brand-yellow); margin-top: 24px; }
+
+    /* STATS */
+    .stats-row { display: grid; grid-template-columns: repeat(4,1fr); background: var(--bg-light); border-bottom: 1px solid var(--border-color); }
+    .stat-item { padding: 60px 40px; text-align: center; border-right: 1px solid var(--border-color); }
+    .stat-item:last-child { border-right: none; }
+    .stat-num { font-family: 'Montserrat', sans-serif; font-size: 3.5rem; font-weight: 800; color: var(--brand-blue); display: block; margin-bottom: 8px; line-height: 1; }
+    .stat-label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em; color: var(--text-muted); }
+
+    /* DRAG CAROUSEL */
+    .drag-section { padding: 100px 0 80px; overflow: hidden; }
+    .drag-section .section-header { padding: 0 64px; margin-bottom: 56px; }
+    .drag-track-container { overflow: hidden; }
+    .image-track { display: flex; gap: 24px; position: relative; left: 64px; user-select: none; cursor: grab; padding-right: 64px; width: max-content; }
+    .image-track:active { cursor: grabbing; }
+
+    /* PRODUCT CARDS — точная копия со страницы товара */
+    .image-track .card-room-new { flex-shrink: 0; width: 340px; background: var(--bg-white); border: 1px solid var(--border-color); border-radius: 4px; display: flex; flex-direction: column; transition: all 0.4s ease; overflow: hidden; }
+    .image-track .card-room-new:hover { border-color: var(--brand-blue); box-shadow: 0 20px 40px rgba(47,59,129,0.08); transform: translateY(-8px); }
+    .image-track .card-room-new .card-img-wrap { width: 100%; aspect-ratio: 2/3; background: var(--bg-light); display: flex; align-items: center; justify-content: center; overflow: hidden; border-bottom: 1px solid var(--border-color); }
+    .image-track .card-room-new img { width: 75%; height: 85%; object-fit: contain; display: block; filter: drop-shadow(0 15px 25px rgba(0,0,0,0.12)); transition: transform 0.5s ease; pointer-events: none; }
+    .image-track .card-room-new:hover img { transform: scale(1.08); }
+    .image-track .card-room-new .card-body { padding: 32px 24px 20px; flex-grow: 1; display: flex; flex-direction: column; }
+    .image-track .card-room-new .card-category { font-family: 'Montserrat', sans-serif; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--brand-green); margin-bottom: 12px; display: block; }
+    .image-track .card-room-new .card-title { font-family: 'Montserrat', sans-serif; font-size: 1.4rem; font-weight: 700; color: var(--brand-blue); line-height: 1.2; margin-bottom: 12px; }
+    .image-track .card-room-new .card-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 20px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    .image-track .card-room-new .card-footer { padding: 20px 24px; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: var(--bg-light); }
+    .image-track .card-room-new .card-price { font-family: 'Montserrat', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--text-main); }
+    .image-track .card-room-new .card-link { font-family: 'Montserrat', sans-serif; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--brand-blue); text-decoration: none; display: flex; align-items: center; gap: 4px; }
+    .image-track .card-room-new .card-link:hover { color: var(--brand-green); }
+
+    /* BLOG ARTICLE CARDS */
+    .image-track .service-card { flex-shrink: 0; width: 320px; background: var(--bg-white); text-decoration: none; border: 1px solid var(--border-color); border-radius: 4px; overflow: hidden; display: block; transition: all 0.4s ease; }
+    .image-track .service-card:hover { transform: translateY(-8px); border-color: var(--brand-green); box-shadow: 0 15px 30px rgba(131,200,134,0.15); }
+    .service-card-img { height: 220px; width: 100%; overflow: hidden; }
+    .service-card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; display: block; pointer-events: none; }
+    .image-track .service-card:hover .service-card-img img { transform: scale(1.08); }
+    .service-card-body { padding: 28px 24px; }
+    .service-card-cat { font-family: 'Montserrat', sans-serif; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--brand-blue); margin-bottom: 12px; display: block; }
+    .service-card-title { font-size: 1.25rem; font-weight: 700; color: var(--text-main); margin-bottom: 12px; line-height: 1.3; display: block; }
+    .service-card-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 24px; }
+    .service-card-link { font-family: 'Montserrat', sans-serif; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-main); border-bottom: 2px solid var(--brand-yellow); padding-bottom: 4px; transition: color 0.3s; }
+    .image-track .service-card:hover .service-card-link { color: var(--brand-blue); }
+
+    .drag-hint { display: flex; align-items: center; gap: 12px; font-family: 'Montserrat', sans-serif; font-size: 0.65rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); padding: 24px 64px 0; }
+    .drag-hint::before { content: ''; display: block; width: 30px; height: 2px; background: var(--brand-yellow); }
+
+    /* REVIEWS */
+    #reviews { padding: 100px 0; background: var(--brand-blue); color: #FFF; }
+    #reviews .section-label { color: var(--brand-yellow); }
+    #reviews .section-title { color: #FFF; }
+    #reviews .section-header { padding: 0 64px; margin-bottom: 64px; }
+    .reviews-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; background: rgba(255,255,255,0.1); }
+    .review-card { background: var(--brand-blue); padding: 56px 48px; transition: background 0.3s; }
+    .review-card:hover { background: #26306D; }
+    .stars { color: var(--brand-yellow); font-size: 1.2rem; letter-spacing: 4px; margin-bottom: 24px; }
+    .review-text { font-size: 1rem; line-height: 1.8; color: #E5E7EB; margin-bottom: 32px; }
+    .review-author { display: flex; flex-direction: column; gap: 6px; }
+    .review-name { font-family: 'Montserrat', sans-serif; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #FFF; }
+    .review-from { font-size: 0.75rem; color: var(--brand-green); letter-spacing: 0.05em; }
+
+    /* CONTACTS */
+    #contacts { display: grid; grid-template-columns: 1fr 1fr; background: var(--bg-light); }
+    .contact-map { height: 100%; min-height: 500px; overflow: hidden; }
+    .contact-map iframe { width: 100%; height: 100%; border: none; filter: grayscale(100%) contrast(1.2) sepia(10%) hue-rotate(180deg); }
+    .contact-info { padding: 100px 80px; display: flex; flex-direction: column; justify-content: center; background: var(--bg-white); }
+    .contact-detail { margin-bottom: 32px; }
+    .contact-detail-label { font-family: 'Montserrat', sans-serif; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--text-muted); margin-bottom: 8px; }
+    .contact-detail-value { font-size: 1.15rem; font-weight: 500; color: var(--text-main); text-decoration: none; display: block; transition: color 0.3s; line-height: 1.5; }
+    a.contact-detail-value:hover { color: var(--brand-blue); }
+    .btn-accent { display: inline-block; font-family: 'Montserrat', sans-serif; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: #FFF; background: var(--brand-blue); padding: 20px 48px; text-decoration: none; transition: all 0.3s; margin-top: 16px; align-self: flex-start; border-radius: 2px; }
+    .btn-accent:hover { background: var(--brand-green); box-shadow: 0 10px 20px rgba(131,200,134,0.3); }
+
+    /* FOOTER */
+    footer { background: var(--bg-dark); color: #9CA3AF; display: flex; align-items: center; justify-content: space-between; padding: 40px 64px; font-size: 0.75rem; letter-spacing: 0.05em; border-top: 1px solid rgba(255,255,255,0.05); }
+    .footer-logo img { height: 24px; opacity: 0.8; transition: opacity 0.3s; }
+    .footer-logo:hover img { opacity: 1; }
+    .footer-links { display: flex; gap: 32px; }
+    .footer-links a { color: #D1D5DB; text-decoration: none; font-family: 'Montserrat', sans-serif; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; transition: color 0.3s; font-size: 0.7rem; }
+    .footer-links a:hover { color: var(--brand-yellow); }
+
+    /* FADE IN */
+    .fade-in { opacity: 0; transform: translateY(30px); transition: opacity 0.8s cubic-bezier(0.165,0.84,0.44,1), transform 0.8s cubic-bezier(0.165,0.84,0.44,1); }
+    .fade-in.visible { opacity: 1; transform: none; }
+
+    /* RESPONSIVE */
+    @media (max-width: 1024px) {
+      nav#main-nav { display: none; }
+      .mobile-header { display: flex; }
+      .drag-section .section-header { padding: 0 32px; }
+      .image-track { left: 32px; padding-right: 32px; }
+      .drag-hint { padding: 24px 32px 0; }
+      .stats-row { grid-template-columns: repeat(2,1fr); }
+      .stat-item:nth-child(2) { border-right: none; }
+      .stat-item:nth-child(3) { border-top: 1px solid var(--border-color); }
+      .reviews-grid { grid-template-columns: 1fr; gap: 2px; }
+      #reviews .section-header { padding: 0 32px; }
+      #contacts { grid-template-columns: 1fr; }
+      .contact-map { height: 350px; min-height: auto; }
+      .contact-info { padding: 64px 32px; }
+      footer { flex-direction: column; gap: 24px; text-align: center; padding: 40px 32px; }
+      .footer-links { gap: 24px; flex-wrap: wrap; justify-content: center; }
+    }
+    @media (max-width: 640px) {
+      .hero-slider .inner .title { font-size: 2.2rem; }
+      .stat-item { padding: 40px 20px; }
+      .review-card { padding: 40px 24px; }
+      .image-track .card-room-new { width: 280px; }
+      .image-track .service-card { width: 280px; }
+      .btn-accent { width: 100%; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV DESKTOP — пункты как на странице товара -->
+  <nav id="main-nav">
+    <a href="#hero" class="nav-logo">
+      <img src="https://i.postimg.cc/6300cGYs/IMG-20260319-125902.png" alt="RAKUN Logo">
+    </a>
+    <ul class="nav-links">
+      <li><a href="#hero">Home</a></li>
+      <li><a href="#hero">About us</a></li>
+      <li><a href="#products">Catalog</a></li>
+      <li><a href="#blog">Blog</a></li>
+      <li><a href="#contacts">Contacts</a></li>
+    </ul>
+    <div class="lang-switcher">
+      <a href="#" class="active">EN</a>
+      <span class="lang-separator">|</span>
+      <a href="#">RU</a>
+      <span class="lang-separator">|</span>
+      <a href="#">GE</a>
+      <span class="lang-separator">|</span>
+      <a href="#">AM</a>
+    </div>
+  </nav>
+
+  <!-- MOBILE HEADER -->
+  <header class="mobile-header" id="mobile-header">
+    <a href="#hero" class="mobile-logo">
+      <img src="https://i.postimg.cc/6300cGYs/IMG-20260319-125902.png" alt="RAKUN Logo" style="height:24px; display:block;">
+    </a>
+    <button class="mobile-hamburger" onclick="toggleMobileMenu()">
+      <span class="line-1"></span>
+      <span class="line-2"></span>
+    </button>
+  </header>
+
+  <!-- MOBILE MENU — пункты как на странице товара -->
+  <div class="mobile-menu-overlay" id="mobile-menu-overlay">
+    <div class="mobile-menu-top">
+      <img src="https://i.postimg.cc/6300cGYs/IMG-20260319-125902.png" alt="RAKUN Logo" style="height:24px; display:block;">
+      <button class="mobile-close" onclick="toggleMobileMenu()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <nav class="mobile-menu-nav">
+      <a href="#hero" onclick="toggleMobileMenu()">Home</a>
+      <a href="#hero" onclick="toggleMobileMenu()">About us</a>
+      <a href="#products" onclick="toggleMobileMenu()">Catalog</a>
+      <a href="#blog" onclick="toggleMobileMenu()">Blog</a>
+      <a href="#contacts" onclick="toggleMobileMenu()">Contacts</a>
+    </nav>
+    <div class="mobile-menu-bottom">
+      <div class="mobile-lang">
+        <a href="#" class="active">EN</a>
+        <a href="#">RU</a>
+        <a href="#">GE</a>
+        <a href="#">AM</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-slider" data-carousel>
+      <div class="carousel-cell" style="background-image:url('https://images.unsplash.com/photo-1585421514284-efb74c2b69ba?auto=format&fit=crop&w=1600&q=80');">
+        <div class="overlay"></div>
+        <div class="inner">
+          <span class="subtitle">Smart 8X Technology</span>
+          <h1 class="title">Flawless Washing<br>In Every Drop</h1>
+          <a href="#products" class="btn">View Catalog</a>
+        </div>
+      </div>
+      <div class="carousel-cell" style="background-image:url('https://images.unsplash.com/photo-1563453392212-326f5e854473?auto=format&fit=crop&w=1600&q=80');">
+        <div class="overlay"></div>
+        <div class="inner">
+          <span class="subtitle">Innovative Care</span>
+          <h1 class="title">Next-Gen Gels<br>&amp; Capsules</h1>
+          <a href="#products" class="btn">Learn More</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats-row fade-in">
+    <div class="stat-item"><span class="stat-num">8X</span><span class="stat-label">Smart Enzymes</span></div>
+    <div class="stat-item"><span class="stat-num">48h</span><span class="stat-label">Long-Lasting Fragrance</span></div>
+    <div class="stat-item"><span class="stat-num">100%</span><span class="stat-label">Color Protection</span></div>
+    <div class="stat-item"><span class="stat-num">Eco</span><span class="stat-label">Phosphate-Free</span></div>
+  </div>
+
+  <!-- PRODUCTS — карточки точно как "Other products in the line" на странице товара -->
+  <section id="products" class="drag-section">
+    <div class="section-header fade-in">
+      <span class="section-label">Professional Line</span>
+      <h2 class="section-title">RAKUN Catalog</h2>
+      <div class="section-divider"></div>
+    </div>
+    <div class="drag-track-container">
+      <div class="image-track" id="rooms-track">
+
+        <div class="card-room-new">
+          <div class="card-img-wrap">
+            <img alt="Anti-Mold Cleaner" draggable="false" src="https://i.postimg.cc/qRbSxWzy/preview.png"/>
+          </div>
+          <div class="card-body">
+            <span class="card-category">Household Cleaners</span>
+            <h3 class="card-title">Anti-Mold Cleaner, 750 ml</h3>
+            <p class="card-desc">Effectively removes mold from bathrooms, seams, silicone, walls, and ceilings.</p>
+          </div>
+          <div class="card-footer">
+            <span class="card-price">6.53 GEL</span>
+            <a class="card-link" href="#">Buy <span>&#8594;</span></a>
+          </div>
+        </div>
+
+        <div class="card-room-new">
+          <div class="card-img-wrap">
+            <img alt="Anti-Grease Cleaner" draggable="false" src="https://i.postimg.cc/SQXktGq1/sprey-preview2.png"/>
+          </div>
+          <div class="card-body">
+            <span class="card-category">Household Cleaners</span>
+            <h3 class="card-title">Anti-Grease Cleaner, 750 ml</h3>
+            <p class="card-desc">Powerful formula for tough grease on kitchen surfaces, ovens, and grills.</p>
+          </div>
+          <div class="card-footer">
+            <span class="card-price">7.71 GEL</span>
+            <a class="card-link" href="#">Buy <span>&#8594;</span></a>
+          </div>
+        </div>
+
+        <div class="card-room-new">
+          <div class="card-img-wrap">
+            <img alt="Clean Glass" draggable="false" src="https://i.postimg.cc/hPTgKPXH/preview-blue.png"/>
+          </div>
+          <div class="card-body">
+            <span class="card-category">Household Cleaners</span>
+            <h3 class="card-title">Clean Glass, 750 ml</h3>
+            <p class="card-desc">Streak-free finish for glass, mirrors, shop windows, and glossy surfaces.</p>
+          </div>
+          <div class="card-footer">
+            <span class="card-price">6.76 GEL</span>
+            <a class="card-link" href="#">Buy <span>&#8594;</span></a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <p class="drag-hint">Swipe to view</p>
+  </section>
+
+  <!-- BLOG -->
+  <section id="blog" class="drag-section" style="background:var(--bg-light);">
+    <div class="section-header fade-in">
+      <span class="section-label">RAKUN Innovations</span>
+      <h2 class="section-title">Technologies of Cleanliness</h2>
+      <div class="section-divider"></div>
+    </div>
+    <div class="drag-track-container">
+      <div class="image-track" id="services-track">
+        <a href="#" class="service-card">
+          <div class="service-card-img"><img src="https://images.unsplash.com/photo-1585421514284-efb74c2b69ba?auto=format&fit=crop&w=700&q=80" draggable="false" alt="Enzymes"></div>
+          <div class="service-card-body">
+            <span class="service-card-cat">Technology</span>
+            <h3 class="service-card-title">The Power of Enzymes</h3>
+            <p class="service-card-desc">How biological enzymes break down the toughest stains even in cold water.</p>
+            <span class="service-card-link">Read article</span>
+          </div>
+        </a>
+        <a href="#" class="service-card">
+          <div class="service-card-img"><img src="https://images.unsplash.com/photo-1556909212-d5b604d0c90d?auto=format&fit=crop&w=700&q=80" draggable="false" alt="Eco"></div>
+          <div class="service-card-body">
+            <span class="service-card-cat">Ecology</span>
+            <h3 class="service-card-title">Phosphate-Free Formula</h3>
+            <p class="service-card-desc">Caring for the environment and ensuring safety for septic tanks in country houses.</p>
+            <span class="service-card-link">Read article</span>
+          </div>
+        </a>
+      </div>
+    </div>
+    <p class="drag-hint">Swipe to view</p>
+  </section>
+
+  <!-- REVIEWS -->
+  <section id="reviews">
+    <div class="section-header fade-in">
+      <span class="section-label">Professionals' Choice</span>
+      <h2 class="section-title">Customer Reviews</h2>
+      <div class="section-divider"></div>
+    </div>
+    <div class="reviews-grid">
+      <div class="review-card fade-in">
+        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="review-text">Excellent perfumed gel. The scent lasts incredibly long, just as advertised. Very economical usage due to the concentrated formula.</p>
+        <div class="review-author">
+          <span class="review-name">Marina V.</span>
+          <span class="review-from">Wholesale Buyer</span>
+        </div>
+      </div>
+      <div class="review-card fade-in" style="transition-delay:0.15s;">
+        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="review-text">The "5 in 1" capsules have become a top seller in our store. Clients highlight the vibrant fragrance and superb stain removal.</p>
+        <div class="review-author">
+          <span class="review-name">David G.</span>
+          <span class="review-from">Supermarket Chain</span>
+        </div>
+      </div>
+      <div class="review-card fade-in" style="transition-delay:0.3s;">
+        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="review-text">The safe, phosphate-free composition is the main advantage for us. The gel does a perfect job even in hard water.</p>
+        <div class="review-author">
+          <span class="review-name">Anna K.</span>
+          <span class="review-from">Distributor</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACTS -->
+  <section id="contacts">
+    <div class="contact-map">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d47720.97905296636!2d44.74920095!3d41.69411365!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40440cd7c4f87d35%3A0xa1729e07e07c32be!2sTbilisi%2C%20Georgia!5e0!3m2!1sen!2sus!4v1710000000000" allowfullscreen="" loading="lazy"></iframe>
+    </div>
+    <div class="contact-info">
+      <span class="section-label">Cooperation</span>
+      <h2 class="section-title">Contacts &amp; Wholesale</h2>
+      <div class="section-divider"></div>
+      <div class="contact-detail" style="margin-top:32px;">
+        <div class="contact-detail-label">Phone / WhatsApp</div>
+        <a href="tel:+995591028083" class="contact-detail-value">+995 591 028 083</a>
+      </div>
+      <div class="contact-detail">
+        <div class="contact-detail-label">Email</div>
+        <a href="mailto:rakun@rakun.ge" class="contact-detail-value">rakun@rakun.ge</a>
+      </div>
+      <div class="contact-detail">
+        <div class="contact-detail-label">Logistics Terms (Ex-warehouse Tbilisi)</div>
+        <span class="contact-detail-value" style="font-size:0.95rem;">Household chemicals — from 2,000 units<br>Washing gel — from 500 bottles<br>Capsules — from 1,250 packs</span>
+      </div>
+      <a href="mailto:rakun@rakun.ge" class="btn-accent">Request Price List</a>
+    </div>
+  </section>
+
+  <!-- FOOTER — содержимое как на странице товара -->
+  <footer>
+    <span class="footer-logo"><img src="https://i.postimg.cc/6300cGYs/IMG-20260319-125902.png" alt="RAKUN Logo"></span>
+    <div class="footer-links">
+      <a href="#products">Catalog</a>
+      <a href="#blog">Technology</a>
+      <a href="#contacts">Wholesale</a>
+    </div>
+    <span>&#169; 2025 RAKUN · Smart Laundry Solutions</span>
+  </footer>
+
+  <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+  <script>
+  (function () {
+    var carousel = document.querySelector('[data-carousel]');
+    if (carousel) {
+      new Flickity(carousel, { accessibility: true, prevNextButtons: true, pageDots: true, setGallerySize: false, wrapAround: true, autoPlay: 6000 });
+    }
+
+    var nav = document.getElementById('main-nav');
+    var mobileHeader = document.getElementById('mobile-header');
+    window.addEventListener('scroll', function() {
+      if (nav) nav.classList.toggle('scrolled', window.scrollY > 50);
+      if (mobileHeader) mobileHeader.classList.toggle('scrolled', window.scrollY > 50);
+    }, { passive: true });
+
+    window.toggleMobileMenu = function() {
+      var menu = document.getElementById('mobile-menu-overlay');
+      var isOpen = menu.classList.contains('open');
+      menu.classList.toggle('open');
+      document.body.style.overflow = isOpen ? '' : 'hidden';
+    };
+
+    function initDragTrack(trackId) {
+      var track = document.getElementById(trackId);
+      if (!track) return;
+      var isDown = false, startX = 0, currentPx = 0, startPx = 0;
+
+      function clampedPx(px) {
+        var maxTravel = Math.max(0, track.scrollWidth - track.parentElement.offsetWidth + 64);
+        return Math.max(-maxTravel, Math.min(0, px));
+      }
+      function getClientX(e) { return e.clientX !== undefined ? e.clientX : (e.touches ? e.touches[0].clientX : null); }
+      function startDrag(e) {
+        var cx = getClientX(e); if (cx === null) return;
+        isDown = true; startX = cx; startPx = currentPx;
+        track.style.cursor = 'grabbing'; track.style.transition = 'none';
+      }
+      function endDrag() {
+        if (!isDown) return; isDown = false;
+        track.style.cursor = 'grab';
+        track.style.transition = 'transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94)';
+        currentPx = clampedPx(currentPx);
+        track.style.transform = 'translateX(' + currentPx + 'px)';
+      }
+      function moveDrag(e) {
+        if (!isDown) return;
+        var cx = getClientX(e); if (cx === null) return;
+        currentPx = startPx + (cx - startX);
+        track.style.transform = 'translateX(' + currentPx + 'px)';
+      }
+      track.addEventListener('mousedown', startDrag);
+      window.addEventListener('mouseup', endDrag);
+      window.addEventListener('mousemove', moveDrag);
+      track.addEventListener('touchstart', startDrag, { passive: true });
+      track.addEventListener('touchend', endDrag);
+      track.addEventListener('touchmove', moveDrag, { passive: true });
+      track.querySelectorAll('img').forEach(function(img) {
+        img.addEventListener('dragstart', function(e) { e.preventDefault(); });
+      });
+    }
+
+    initDragTrack('rooms-track');
+    initDragTrack('services-track');
+
+    var fadeEls = document.querySelectorAll('.fade-in');
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.1 });
+    fadeEls.forEach(function(el) { observer.observe(el); });
+
+  })();
+  </script>
+</body>
+</html>
